@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY DOWNLOAD HUB</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #080d19;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  text-align: center;
+  padding: 45px 15px;
+  background: linear-gradient(135deg,#172554,#4f46e5);
+}
+
+header h1 {
+  font-size: 32px;
+  margin: 0 0 10px;
+}
+
+header p {
+  color: #dbeafe;
+}
+
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 18px;
+}
+
+/* DOWNLOAD ALL RAR BUTTON */
+.download-rar {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: #7c3aed;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.download-rar:hover {
+  background: #6d28d9;
+}
+
+.search {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #151d30;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #1e293b;
+  color: white;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: #6366f1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
+  gap: 18px;
+}
+
+.card {
+  background: #151d30;
+  border: 1px solid #293449;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.preview {
+  height: 190px;
+  background: #0b1220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.preview .icon {
+  font-size: 55px;
+}
+
+.info {
+  padding: 15px;
+}
+
+.info h3 {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+}
+
+.info p {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions button,
+.actions a {
+  flex: 1;
+  padding: 11px;
+  border: 0;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.actions .view {
+  background: #334155;
+}
+
+.empty {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000e;
+  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-box {
+  width: min(900px,100%);
+  max-height: 92vh;
+  overflow: auto;
+  background: #151d30;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.modal img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  margin: auto;
+}
+
+.modal video {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  margin: auto;
+}
+
+.modal iframe {
+  width: 100%;
+  height: 70vh;
+  border: 0;
+  background: white;
+}
+
+.modal pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: white;
+}
+
+.close {
+  float: right;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #64748b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📁 MY DOWNLOAD HUB</h1>
+  <p>View and Download Pictures, Videos, Notes and PDF Files</p>
+</header>
+
+<main>
+
+  <!-- DOWNLOAD ALL RAR BUTTON -->
+  <a
+    class="download-rar"
+    href="https://github.com/Leonardcastillo21/picerapp/releases/download/v1.0/Picer.Class.2026.rar"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    📦 DOWNLOAD ALL FILES (RAR)
+  </a>
+
+  <input
+    class="search"
+    id="search"
+    placeholder="🔍 Search files..."
+  >
+
+  <div class="tabs">
+    <button class="active" data-type="all">All Files</button>
+    <button data-type="image">🖼 Pictures</button>
+    <button data-type="video">🎬 Videos</button>
+    <button data-type="note">📝 Notepad</button>
+    <button data-type="pdf">📕 PDF Files</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+</main>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closePreview()">✖ Close</button>
+    <h3 id="modalTitle"></h3>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  MY DOWNLOAD HUB © 2026
+</footer>
+
+<script>
+
+// ==================================
+// ADD YOUR FILES HERE
+// ==================================
+
+const files = [
+  {
+    name: "Picture 1",
+    type: "image",
+    url: "picture1.png"
+  },
+  {
+    name: "Picture 2",
+    type: "image",
+    url: "picture2.png"
+  },
+  {
+    name: "My Video",
+    type: "video",
+    url: "video1.mp4"
+  },
+  {
+    name: "My Notes",
+    type: "note",
+    url: "notes.txt"
+  },
+  {
+    name: "PDF Document 1",
+    type: "pdf",
+    url: "document1.pdf"
+  },
+  {
+    name: "PDF Document 2",
+    type: "pdf",
+    url: "document2.pdf"
+  }
+];
+
+// ==================================
+// WEBSITE FUNCTIONS
+// ==================================
+
+let currentType = "all";
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+
+function render() {
+
+  const q = search.value.toLowerCase();
+
+  const filtered = files.filter(f =>
+    (currentType === "all" || f.type === currentType) &&
+    f.name.toLowerCase().includes(q)
+  );
+
+  grid.innerHTML = "";
+
+  if (!filtered.length) {
+    grid.innerHTML =
+      '<div class="empty">No files found.</div>';
+    return;
+  }
+
+  filtered.forEach(f => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const preview = document.createElement("div");
+    preview.className = "preview";
+
+    if (f.type === "image") {
+
+      const img = document.createElement("img");
+      img.src = f.url;
+      img.alt = f.name;
+      preview.appendChild(img);
+
+    } else {
+
+      const icon = document.createElement("div");
+      icon.className = "icon";
+
+      icon.textContent =
+        f.type === "video" ? "🎬" :
+        f.type === "pdf" ? "📕" : "📝";
+
+      preview.appendChild(icon);
+    }
+
+    const info = document.createElement("div");
+    info.className = "info";
+
+    const title = document.createElement("h3");
+    title.textContent = f.name;
+
+    const category = document.createElement("p");
+    category.textContent = f.type.toUpperCase();
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const view = document.createElement("button");
+    view.className = "view";
+    view.textContent = "VIEW";
+
+    view.onclick = () => openPreview(f);
+
+    const download = document.createElement("a");
+    download.href = f.url;
+    download.download = f.url.split("/").pop();
+    download.textContent = "DOWNLOAD";
+
+    actions.append(view, download);
+
+    info.append(title, category, actions);
+
+    card.append(preview, info);
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+// ==================================
+// PREVIEW FILES
+// ==================================
+
+function openPreview(f) {
+
+  const content = document.getElementById("modalContent");
+
+  content.innerHTML = "";
+
+  document.getElementById("modalTitle").textContent = f.name;
+
+  if (f.type === "image") {
+
+    const img = document.createElement("img");
+    img.src = f.url;
+    img.alt = f.name;
+
+    content.appendChild(img);
+
+  }
+
+  else if (f.type === "video") {
+
+    const video = document.createElement("video");
+
+    video.src = f.url;
+    video.controls = true;
+    video.playsInline = true;
+
+    content.appendChild(video);
+
+  }
+
+  else if (f.type === "pdf") {
+
+    const iframe = document.createElement("iframe");
+
+    iframe.src = f.url;
+
+    iframe.title = f.name;
+
+    content.appendChild(iframe);
+
+  }
+
+  else if (f.type === "note") {
+
+    const pre = document.createElement("pre");
+
+    pre.textContent = "Loading...";
+
+    content.appendChild(pre);
+
+    fetch(f.url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("File not found");
+        }
+        return response.text();
+      })
+      .then(text => {
+        pre.textContent = text;
+      })
+      .catch(() => {
+        pre.textContent = "Unable to load notes.";
+      });
+
+  }
+
+  document.getElementById("modal").classList.add("show");
+
+}
+
+// ==================================
+// CLOSE PREVIEW
+// ==================================
+
+function closePreview() {
+
+  document.getElementById("modal").classList.remove("show");
+
+  document.getElementById("modalContent").innerHTML = "";
+
+}
+
+// ==================================
+// CATEGORY FILTER
+// ==================================
+
+document.querySelectorAll(".tabs button").forEach(btn => {
+
+  btn.onclick = () => {
+
+    document.querySelectorAll(".tabs button")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    currentType = btn.dataset.type;
+
+    render();
+
+  };
+
+});
+
+// ==================================
+// SEARCH
+// ==================================
+
+search.addEventListener("input", render);
+
+// INITIAL LOAD
+render();
+
+</script>
+
+</body>
+</html>
